@@ -1,9 +1,9 @@
 <?php
 
-
 namespace SilverStripe\Headless\GraphQL;
 
 use SilverStripe\Assets\File;
+use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Configurable;
@@ -82,8 +82,15 @@ class ModelLoader implements SchemaUpdater
                     });
                 }
                 if ($sng instanceof File) {
-                    $model
-                        ->addField('absoluteLink', 'String');
+                    $model->addField('absoluteLink', 'String');
+                }
+                if ($sng instanceof Image) {
+                    $model->addField('width', 'Int');
+                    $model->addField('height', 'Int');
+                    $model->addField('relativeLink', [
+                        'type' => 'String',
+                        'property' => 'Link'
+                    ]);
                 }
                 // Special case for link
                 if ($model->getModel()->hasField('link') && !$model->getFieldByName('link')) {
