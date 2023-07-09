@@ -93,21 +93,6 @@ class ModelLoader implements SchemaUpdater
                         'type' => 'String',
                         'property' => 'Link'
                     ]);
-
-                    $sizeArray = [
-                        'xlImage',
-                        'lgImage',
-                        'mdImage',
-                        'smImage',
-                        'xsImage',
-                    ];
-                    foreach($sizeArray as $size){
-                        $model->addField($size, [
-                                'type' => 'String',
-                                'resolver' => [CustomResolver::class, 'resolveImageBySize']
-                            ]
-                        );
-                    }
                 }
                 // Special case for link
                 if ($model->getModel()->hasField('link') && !$model->getFieldByName('link')) {
