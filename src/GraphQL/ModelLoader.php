@@ -82,6 +82,11 @@ class ModelLoader implements SchemaUpdater
                         // for consistency
                         $field->addResolverAfterware([static::class, 'ensurePage']);
                     });
+
+                    $model->addField('metaObject', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveMetaObject']
+                    ]);
                 }
                 if ($sng instanceof File) {
                     $model->addField('absoluteLink', 'String');
@@ -89,6 +94,7 @@ class ModelLoader implements SchemaUpdater
                 if ($sng instanceof Image) {
                     $model->addField('width', 'Int');
                     $model->addField('height', 'Int');
+
                     $model->addField('relativeLink', [
                         'type' => 'String',
                         'property' => 'Link'
@@ -97,10 +103,6 @@ class ModelLoader implements SchemaUpdater
                 // Special case for link
                 if ($model->getModel()->hasField('link') && !$model->getFieldByName('link')) {
                     $model->addField('link', 'String!');
-                    $model->addField('baseUrl', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveBaseUrl']
-                    ]);
                 }
             });
         }
