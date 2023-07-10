@@ -6,6 +6,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\CMS\Model\SiteTree;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\SiteConfig\SiteConfig;
+use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 
 class CustomResolver
 {
@@ -47,5 +48,17 @@ class CustomResolver
     }
 
     return $sitetreeObj ? json_encode($array) : '';
+  }
+
+  public static function resolveTeamMemberSort(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $elementTeamMember = ElementTeamMemberProfile::get()->byID($obj->ID);
+    $sortData = [];
+    if ($elementTeamMember) {
+      foreach($elementTeamMember->MemberProfiles() as $memberProfile) {
+        $sortData[] = $memberProfile->SortOrder;
+      } 
+    }
+    return json_encode($sortData);
   }
 }
