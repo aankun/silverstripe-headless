@@ -17,6 +17,8 @@ use SilverStripe\GraphQL\Schema\Type\ModelType;
 use SilverStripe\ORM\DataObject;
 use ReflectionException;
 
+use SilverStripe\Headless\GraphQL\CustomResolver;
+
 class ModelLoader implements SchemaUpdater
 {
     use Configurable;
@@ -80,6 +82,11 @@ class ModelLoader implements SchemaUpdater
                         // for consistency
                         $field->addResolverAfterware([static::class, 'ensurePage']);
                     });
+
+                    $model->addField('metaObject', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveMetaObject']
+                    ]);
                 }
                 if ($sng instanceof File) {
                     $model->addField('absoluteLink', 'String');
@@ -87,6 +94,7 @@ class ModelLoader implements SchemaUpdater
                 if ($sng instanceof Image) {
                     $model->addField('width', 'Int');
                     $model->addField('height', 'Int');
+
                     $model->addField('relativeLink', [
                         'type' => 'String',
                         'property' => 'Link'
