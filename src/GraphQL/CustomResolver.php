@@ -56,9 +56,10 @@ class CustomResolver
     $sortData = [];
     if ($elementTeamMember) {
       foreach($elementTeamMember->MemberProfiles() as $memberProfile) {
-        $sortData[] = $memberProfile->SortOrder;
-      } 
+        $sortData[$memberProfile->SortOrder] = $memberProfile->ID;
+      }
+      ksort($sortData);
     }
-    return json_encode($sortData);
+    return json_encode(array_values($sortData));
   }
 }
