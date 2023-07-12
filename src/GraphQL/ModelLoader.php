@@ -15,11 +15,12 @@ use SilverStripe\GraphQL\Schema\Interfaces\SchemaUpdater;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\GraphQL\Schema\Type\ModelType;
 use SilverStripe\ORM\DataObject;
-use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 
 use ReflectionException;
 
 use SilverStripe\Headless\GraphQL\CustomResolver;
+use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
+use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
 class ModelLoader implements SchemaUpdater
 {
@@ -103,10 +104,13 @@ class ModelLoader implements SchemaUpdater
                     ]);
                 }
 
-                if ($sng instanceof ElementTeamMemberProfile) {
+                if (
+                    $sng instanceof ElementFeaturedArticles ||
+                    $sng instanceof ElementTeamMemberProfile
+                ) {
                     $model->addField('sortData', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveTeamMemberSort']
+                        'resolver' => [CustomResolver::class, 'resolveSortingData']
                     ]);
                 }
 
