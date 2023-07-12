@@ -15,9 +15,12 @@ use SilverStripe\GraphQL\Schema\Interfaces\SchemaUpdater;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\GraphQL\Schema\Type\ModelType;
 use SilverStripe\ORM\DataObject;
+
 use ReflectionException;
 
 use SilverStripe\Headless\GraphQL\CustomResolver;
+use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
+use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
 class ModelLoader implements SchemaUpdater
 {
@@ -100,6 +103,17 @@ class ModelLoader implements SchemaUpdater
                         'property' => 'Link'
                     ]);
                 }
+
+                if (
+                    $sng instanceof ElementFeaturedArticles ||
+                    $sng instanceof ElementTeamMemberProfile
+                ) {
+                    $model->addField('sortData', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveSortingData']
+                    ]);
+                }
+
                 // Special case for link
                 if ($model->getModel()->hasField('link') && !$model->getFieldByName('link')) {
                     $model->addField('link', 'String!');
