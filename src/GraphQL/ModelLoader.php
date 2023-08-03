@@ -19,8 +19,8 @@ use SilverStripe\ORM\DataObject;
 use ReflectionException;
 
 use SilverStripe\Headless\GraphQL\CustomResolver;
-use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
-use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
+use Aankun\Models\Elemental\TeamMember\ElementTeamMemberProfile;
+use Aankun\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
 class ModelLoader implements SchemaUpdater
 {
