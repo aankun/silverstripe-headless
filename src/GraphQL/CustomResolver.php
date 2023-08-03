@@ -6,8 +6,8 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\CMS\Model\SiteTree;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\SiteConfig\SiteConfig;
-use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
-use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
+use Aankun\Models\Elemental\TeamMember\ElementTeamMemberProfile;
+use Aankun\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
 class CustomResolver
 {
