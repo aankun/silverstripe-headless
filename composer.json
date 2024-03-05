@@ -15,7 +15,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/dnadesign/silverstripe-apikey"
+      "url": "https://github.com/aankun/silverstripe-apikey"
     }
   ],
   "require": {
@@ -23,7 +23,7 @@
     "silverstripe/graphql": "^5",
     "silverstripe/cms-events": "dev-master",
     "unclecheese/display-logic": "~3.0",
-    "sminnee/silverstripe-apikey": "dev-main",
+    "sminnee/silverstripe-apikey": "dev-master",
     "symbiote/silverstripe-grouped-cms-menu": "^4.1",
     "firebase/php-jwt": "^6.10",
     "guzzlehttp/guzzle": "^7.8"
