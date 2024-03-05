@@ -12,6 +12,12 @@
       "name": "Uncle Cheese"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/dnadesign/silverstripe-apikey"
+    }
+  ],
   "require": {
     "silverstripe/cms": "^5",
     "silverstripe/graphql": "^5",
