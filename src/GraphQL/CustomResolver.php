@@ -8,6 +8,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\SiteConfig\SiteConfig;
 use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
+use App\PageTypes\ProductPage;
 
 class CustomResolver
 {
@@ -67,5 +68,21 @@ class CustomResolver
     }
 
     return json_encode(array_values($sortData));
+  }
+
+  public static function resolveStockistManyMany(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $productObj = ProductPage::get()->byID($obj->ID);
+
+    $array = [];
+    foreach($productObj->Stockists() as $stockist) {
+      $array[] = [
+        'id' => $stockist->ID,
+        'whereToBuyLink' => $stockist->WhereToBuyLink,
+        'sortOrder' => $stockist->SortOrder
+      ];
+    }
+
+    return json_encode($array);
   }
 }
