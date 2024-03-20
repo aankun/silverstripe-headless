@@ -22,6 +22,8 @@ use SilverStripe\Headless\GraphQL\CustomResolver;
 use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
+use App\PageTypes\ProductPage;
+
 class ModelLoader implements SchemaUpdater
 {
     use Configurable;
@@ -111,6 +113,13 @@ class ModelLoader implements SchemaUpdater
                     $model->addField('sortData', [
                         'type' => 'String',
                         'resolver' => [CustomResolver::class, 'resolveSortingData']
+                    ]);
+                }
+
+                if( $sng instanceof ProductPage) {
+                    $model->addField('stockistsExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveStockistManyMany']
                     ]);
                 }
 
