@@ -123,6 +123,20 @@ class ModelLoader implements SchemaUpdater
                     ]);
                 }
 
+                if( $sng instanceof ElementFeaturedBrands) {
+                    $model->addField('brandsExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveBrandsManyMany']
+                    ]);
+                }
+
+                if( $sng instanceof ElementRecipeCards) {
+                    $model->addField('recipesExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveRecipesManyMany']
+                    ]);
+                }
+
                 // Special case for link
                 if ($model->getModel()->hasField('link') && !$model->getFieldByName('link')) {
                     $model->addField('link', 'String!');
