@@ -8,7 +8,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\SiteConfig\SiteConfig;
 use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
+
 use App\PageTypes\ProductPage;
+use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
+use App\Models\Elemental\RecipeCards\ElementRecipeCards;
 
 class CustomResolver
 {
@@ -80,6 +83,36 @@ class CustomResolver
         'id' => $stockist->ID,
         'whereToBuyLink' => $stockist->WhereToBuyLink,
         'sortOrder' => $stockist->SortOrder
+      ];
+    }
+
+    return json_encode($array);
+  }
+
+  public static function resolveBrandsManyMany(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $dataObj = ElementFeaturedBrands::get()->byID($obj->ID);
+
+    $array = [];
+    foreach($dataObj->Brands() as $brand) {
+      $array[] = [
+        'id' => $brand->ID,
+        'sortOrder' => $brand->SortOrder
+      ];
+    }
+
+    return json_encode($array);
+  }
+
+  public static function resolveRecipesManyMany(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $dataObj = ElementRecipeCards::get()->byID($obj->ID);
+
+    $array = [];
+    foreach($dataObj->Recipes() as $recipe) {
+      $array[] = [
+        'id' => $recipe->ID,
+        'sortOrder' => $recipe->SortOrder
       ];
     }
 
