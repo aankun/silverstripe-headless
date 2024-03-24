@@ -23,6 +23,8 @@ use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
 use App\PageTypes\ProductPage;
+use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
+use App\Models\Elemental\RecipeCards\ElementRecipeCards;
 
 class ModelLoader implements SchemaUpdater
 {
