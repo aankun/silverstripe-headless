@@ -123,6 +123,11 @@ class ModelLoader implements SchemaUpdater
                         'type' => 'String',
                         'resolver' => [CustomResolver::class, 'resolveStockistManyMany']
                     ]);
+                    
+                    $model->addField('nextProduct', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveNextProduct']
+                    ]);
                 }
 
                 if( $sng instanceof ElementFeaturedBrands) {
