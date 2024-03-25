@@ -89,6 +89,30 @@ class CustomResolver
     return json_encode($array);
   }
 
+  public static function resolveNextProduct(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $currentProduct = ProductPage::get()->byID($obj->ID);
+    $nextProduct = ProductPage::get()->filter(['ParentID' => $currentProduct->ParentID, 'Sort:GreaterThan' => $currentProduct->Sort])->first();
+
+    $array = [];
+    if ($nextProduct && $nextProduct->exists()) {
+      $array = [
+        'title' => $nextProduct->Title,
+        'link' => $nextProduct->Link()
+      ];
+    } else {
+      $nextProduct = ProductPage::get()->filter(['ParentID' => $currentProduct->ParentID])->first();
+      if ($nextProduct && $nextProduct->exists()) {
+        $array = [
+          'title' => $nextProduct->Title,
+          'link' => $nextProduct->Link()
+        ];
+      }
+    }
+
+    return json_encode($array);
+  }
+
   public static function resolveBrandsManyMany(DataObject $obj, array $args, array $context, ResolveInfo $info)
   {
     $dataObj = ElementFeaturedBrands::get()->byID($obj->ID);
