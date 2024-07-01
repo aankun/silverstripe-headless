@@ -15,7 +15,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/aankun/silverstripe-apikey"
+      "url": "https://github.com/Ogilvy-NZ/silverstripe-apikey"
     }
   ],
   "require": {
