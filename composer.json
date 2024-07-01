@@ -12,15 +12,21 @@
       "name": "Uncle Cheese"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Ogilvy-NZ/silverstripe-apikey"
+    }
+  ],
   "require": {
-    "silverstripe/cms": "^4.4",
-    "silverstripe/graphql": "^4",
-    "silverstripe/cms-events": "*",
-    "unclecheese/display-logic": "~2.0",
+    "silverstripe/cms": "^5",
+    "silverstripe/graphql": "^5",
+    "silverstripe/cms-events": "dev-master",
+    "unclecheese/display-logic": "~3.0",
     "sminnee/silverstripe-apikey": "dev-master",
-    "symbiote/silverstripe-grouped-cms-menu": "^4",
-    "firebase/php-jwt": "^5.4",
-    "guzzlehttp/guzzle": "^7.0"
+    "symbiote/silverstripe-grouped-cms-menu": "^4.1",
+    "firebase/php-jwt": "^6.10",
+    "guzzlehttp/guzzle": "^7.8"
   },
   "autoload": {
     "psr-4": {

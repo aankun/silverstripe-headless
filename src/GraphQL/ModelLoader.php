@@ -22,6 +22,10 @@ use SilverStripe\Headless\GraphQL\CustomResolver;
 use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
 use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 
+use App\PageTypes\ProductPage;
+use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
+use App\Models\Elemental\RecipeCards\ElementRecipeCards;
+
 class ModelLoader implements SchemaUpdater
 {
     use Configurable;
@@ -111,6 +115,32 @@ class ModelLoader implements SchemaUpdater
                     $model->addField('sortData', [
                         'type' => 'String',
                         'resolver' => [CustomResolver::class, 'resolveSortingData']
+                    ]);
+                }
+
+                if( $sng instanceof ProductPage) {
+                    $model->addField('stockistsExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveStockistManyMany']
+                    ]);
+                    
+                    $model->addField('nextProduct', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveNextProduct']
+                    ]);
+                }
+
+                if( $sng instanceof ElementFeaturedBrands) {
+                    $model->addField('brandsExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveBrandsManyMany']
+                    ]);
+                }
+
+                if( $sng instanceof ElementRecipeCards) {
+                    $model->addField('recipesExtra', [
+                        'type' => 'String',
+                        'resolver' => [CustomResolver::class, 'resolveRecipesManyMany']
                     ]);
                 }
 
