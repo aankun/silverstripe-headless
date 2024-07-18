@@ -7,7 +7,6 @@ use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\Schema\DataObject\InterfaceBuilder;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Field\ModelField;
@@ -25,6 +24,8 @@ use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
 use App\PageTypes\ProductPage;
 use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
 use App\Models\Elemental\RecipeCards\ElementRecipeCards;
+
+use SilverStripe\Core\Injector\Injector;
 
 class ModelLoader implements SchemaUpdater
 {
@@ -55,6 +56,7 @@ class ModelLoader implements SchemaUpdater
     public static function updateSchema(Schema $schema, array $config = []): void
     {
         $classes = static::getIncludedClasses();
+
         foreach ($classes as $class) {
             $schema->addModelbyClassName($class, function (ModelType $model) use ($schema) {
                 $model->addAllFields();
@@ -92,8 +94,18 @@ class ModelLoader implements SchemaUpdater
 
                     $model->addField('metaObject', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveMetaObject']
-                    ]);
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveMetaObject']
+                    ]); 
+
+                    $model->addField('basePageData', [
+                        'type' => 'String',
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveBasePageData']
+                    ]); 
+                    
+                    $model->addField('navigationData', [
+                        'type' => 'String',
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveNavigationData']
+                    ]); 
                 }
                 if ($sng instanceof File) {
                     $model->addField('absoluteLink', 'String');
@@ -114,33 +126,33 @@ class ModelLoader implements SchemaUpdater
                 ) {
                     $model->addField('sortData', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveSortingData']
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveSortingData']
                     ]);
                 }
 
                 if( $sng instanceof ProductPage) {
                     $model->addField('stockistsExtra', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveStockistManyMany']
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveStockistManyMany']
                     ]);
                     
                     $model->addField('nextProduct', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveNextProduct']
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveNextProduct']
                     ]);
                 }
 
                 if( $sng instanceof ElementFeaturedBrands) {
                     $model->addField('brandsExtra', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveBrandsManyMany']
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveBrandsManyMany']
                     ]);
                 }
 
                 if( $sng instanceof ElementRecipeCards) {
                     $model->addField('recipesExtra', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveRecipesManyMany']
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveRecipesManyMany']
                     ]);
                 }
 
