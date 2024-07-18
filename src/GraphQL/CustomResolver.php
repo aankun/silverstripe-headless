@@ -34,7 +34,7 @@ class CustomResolver
     if($sitetreeObj){
       $siteConfig = SiteConfig::current_site_config();
 
-      $array['metaTitle'] = $sitetreeObj->metaTitle ? $sitetreeObj->metaTitle : $sitetreeObj->Title;
+      $array['metaTitle'] = $sitetreeObj->metaTitle ? $sitetreeObj->metaTitle : $sitetreeObj->Title . '[test 1]';
       $array['metaDescription'] = $sitetreeObj->MetaDescription ? $sitetreeObj->MetaDescription : $siteConfig->MetaSiteDescription;
       $array['canonical'] = $sitetreeObj->MetaCanonicalURL ? $sitetreeObj->MetaCanonicalURL : $sitetreeObj->AbsoluteLink();
       $array['siteName'] = $siteConfig->Title;
@@ -53,6 +53,27 @@ class CustomResolver
     }
 
     return $sitetreeObj ? json_encode($array) : '';
+  }
+  
+  public static function resolveBasePageData(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $sitetreeObj = SiteTree::get()->byID($obj->ID);
+    $array = [];
+
+    if($sitetreeObj){
+      // populate aditional page data here
+    }
+
+    return $sitetreeObj ? json_encode($array) : '';
+  }
+
+  public static function resolveNavigationData(DataObject $obj, array $args, array $context, ResolveInfo $info)
+  {
+    $array = [];
+
+    // populate aditional navigation data here
+
+    return json_encode($array);
   }
 
   public static function resolveSortingData(DataObject $obj, array $args, array $context, ResolveInfo $info)
