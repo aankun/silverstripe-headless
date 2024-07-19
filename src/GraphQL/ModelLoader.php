@@ -18,13 +18,6 @@ use SilverStripe\ORM\DataObject;
 use ReflectionException;
 
 use SilverStripe\Headless\GraphQL\CustomResolver;
-use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
-use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
-
-use App\PageTypes\ProductPage;
-use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
-use App\Models\Elemental\RecipeCards\ElementRecipeCards;
-
 use SilverStripe\Core\Injector\Injector;
 
 class ModelLoader implements SchemaUpdater
@@ -76,6 +69,7 @@ class ModelLoader implements SchemaUpdater
                     ]);
 
                     $model->addField('children', "[$interfaceName!]!");
+                    
                     // Keep the base navigation query in its own space so users can customise
                     // "children" and "parent." This could also be done with aliases, but
                     // this allows for a really straightforward generation of a types definition file
@@ -107,9 +101,18 @@ class ModelLoader implements SchemaUpdater
                         'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveNavigationData']
                     ]); 
                 }
+
+                // extra field that can be use for adding extra data to data object, 
+                // for example elemental data object
+                $model->addField('extraData', [
+                    'type' => 'String',
+                    'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveExtraData']
+                ]); 
+
                 if ($sng instanceof File) {
                     $model->addField('absoluteLink', 'String');
                 }
+
                 if ($sng instanceof Image) {
                     $model->addField('width', 'Int');
                     $model->addField('height', 'Int');
@@ -117,42 +120,6 @@ class ModelLoader implements SchemaUpdater
                     $model->addField('relativeLink', [
                         'type' => 'String',
                         'property' => 'Link'
-                    ]);
-                }
-
-                if (
-                    $sng instanceof ElementFeaturedArticles ||
-                    $sng instanceof ElementTeamMemberProfile
-                ) {
-                    $model->addField('sortData', [
-                        'type' => 'String',
-                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveSortingData']
-                    ]);
-                }
-
-                if( $sng instanceof ProductPage) {
-                    $model->addField('stockistsExtra', [
-                        'type' => 'String',
-                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveStockistManyMany']
-                    ]);
-                    
-                    $model->addField('nextProduct', [
-                        'type' => 'String',
-                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveNextProduct']
-                    ]);
-                }
-
-                if( $sng instanceof ElementFeaturedBrands) {
-                    $model->addField('brandsExtra', [
-                        'type' => 'String',
-                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveBrandsManyMany']
-                    ]);
-                }
-
-                if( $sng instanceof ElementRecipeCards) {
-                    $model->addField('recipesExtra', [
-                        'type' => 'String',
-                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveRecipesManyMany']
                     ]);
                 }
 
