@@ -28,7 +28,7 @@ class CustomResolver
     if($sitetreeObj){
       $siteConfig = SiteConfig::current_site_config();
 
-      $array['metaTitle'] = $sitetreeObj->metaTitle ? $sitetreeObj->metaTitle : $sitetreeObj->Title . '[test 1]';
+      $array['metaTitle'] = $sitetreeObj->metaTitle ? $sitetreeObj->metaTitle : $sitetreeObj->Title;
       $array['metaDescription'] = $sitetreeObj->MetaDescription ? $sitetreeObj->MetaDescription : $siteConfig->MetaSiteDescription;
       $array['canonical'] = $sitetreeObj->MetaCanonicalURL ? $sitetreeObj->MetaCanonicalURL : $sitetreeObj->AbsoluteLink();
       $array['siteName'] = $siteConfig->Title;
