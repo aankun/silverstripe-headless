@@ -7,7 +7,6 @@ use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\Schema\DataObject\InterfaceBuilder;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Field\ModelField;
@@ -19,12 +18,7 @@ use SilverStripe\ORM\DataObject;
 use ReflectionException;
 
 use SilverStripe\Headless\GraphQL\CustomResolver;
-use Ogilvy\Models\Elemental\TeamMember\ElementTeamMemberProfile;
-use Ogilvy\Models\Elemental\FeaturedArticles\ElementFeaturedArticles;
-
-use App\PageTypes\ProductPage;
-use App\Models\Elemental\FeaturedBrands\ElementFeaturedBrands;
-use App\Models\Elemental\RecipeCards\ElementRecipeCards;
+use SilverStripe\Core\Injector\Injector;
 
 class ModelLoader implements SchemaUpdater
 {
@@ -55,6 +49,7 @@ class ModelLoader implements SchemaUpdater
     public static function updateSchema(Schema $schema, array $config = []): void
     {
         $classes = static::getIncludedClasses();
+
         foreach ($classes as $class) {
             $schema->addModelbyClassName($class, function (ModelType $model) use ($schema) {
                 $model->addAllFields();
@@ -74,6 +69,7 @@ class ModelLoader implements SchemaUpdater
                     ]);
 
                     $model->addField('children', "[$interfaceName!]!");
+                    
                     // Keep the base navigation query in its own space so users can customise
                     // "children" and "parent." This could also be done with aliases, but
                     // this allows for a really straightforward generation of a types definition file
@@ -92,12 +88,31 @@ class ModelLoader implements SchemaUpdater
 
                     $model->addField('metaObject', [
                         'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveMetaObject']
-                    ]);
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveMetaObject']
+                    ]); 
+
+                    $model->addField('basePageData', [
+                        'type' => 'String',
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveBasePageData']
+                    ]); 
+                    
+                    $model->addField('navigationData', [
+                        'type' => 'String',
+                        'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveNavigationData']
+                    ]); 
                 }
+
+                // extra field that can be use for adding extra data to data object, 
+                // for example elemental data object
+                $model->addField('extraData', [
+                    'type' => 'String',
+                    'resolver' => [Injector::inst()->get(CustomResolver::class)::class, 'resolveExtraData']
+                ]); 
+
                 if ($sng instanceof File) {
                     $model->addField('absoluteLink', 'String');
                 }
+
                 if ($sng instanceof Image) {
                     $model->addField('width', 'Int');
                     $model->addField('height', 'Int');
@@ -105,42 +120,6 @@ class ModelLoader implements SchemaUpdater
                     $model->addField('relativeLink', [
                         'type' => 'String',
                         'property' => 'Link'
-                    ]);
-                }
-
-                if (
-                    $sng instanceof ElementFeaturedArticles ||
-                    $sng instanceof ElementTeamMemberProfile
-                ) {
-                    $model->addField('sortData', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveSortingData']
-                    ]);
-                }
-
-                if( $sng instanceof ProductPage) {
-                    $model->addField('stockistsExtra', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveStockistManyMany']
-                    ]);
-                    
-                    $model->addField('nextProduct', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveNextProduct']
-                    ]);
-                }
-
-                if( $sng instanceof ElementFeaturedBrands) {
-                    $model->addField('brandsExtra', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveBrandsManyMany']
-                    ]);
-                }
-
-                if( $sng instanceof ElementRecipeCards) {
-                    $model->addField('recipesExtra', [
-                        'type' => 'String',
-                        'resolver' => [CustomResolver::class, 'resolveRecipesManyMany']
                     ]);
                 }
 
