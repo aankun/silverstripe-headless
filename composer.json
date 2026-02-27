@@ -21,7 +21,7 @@
   "require": {
     "silverstripe/cms": "^5",
     "silverstripe/graphql": "^5",
-    "silverstripe/cms-events": "dev-master",
+    "silverstripe/cms-events": "2.x-dev",
     "unclecheese/display-logic": "~3.0",
     "sminnee/silverstripe-apikey": "dev-master",
     "symbiote/silverstripe-grouped-cms-menu": "^4.1",
